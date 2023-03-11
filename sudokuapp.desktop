@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Sudoku
+Icon=sudokuapp
+StartupNotify=true
+Exec=@bindir@/sudokuapp

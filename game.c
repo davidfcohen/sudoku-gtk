@@ -4,31 +4,29 @@
 #include <string.h>
 #include <time.h>
 
-#include "sudoku.h"
+#include "game.h"
 
 #define RECORD_SIZE 100
 #define SHA1_SIZE   12
 #define PUZZLE_SIZE 81
 
+int main(void) {
+    return 0;
+}
+
 bool read_sudoku(char puzzle[9][9], const char *filename, int index) {
-    // Open a Sudoku "Puzzle Bank" database file.
     FILE *database = fopen(filename, "r");
     
-    // Handle any file open errors.
     if (database == NULL)
         return false;
 
-    // Seek to EOF.
     fseek(database, 0, SEEK_END);
 
-    // Check for an invalid index.
     if (index < 0 || index >= ftell(database) / RECORD_SIZE)
         return false;
 
-    // Seek to the given index + the offset of the puzzle.
     fseek(database, index * RECORD_SIZE + SHA1_SIZE + 1, SEEK_SET);
 
-    // Read 81 bytes into the puzzle array.
     fread(puzzle, 1, PUZZLE_SIZE, database);
 
     fclose(database);
@@ -37,24 +35,18 @@ bool read_sudoku(char puzzle[9][9], const char *filename, int index) {
 }
 
 int read_random_sudoku(char puzzle[9][9], const char *filename) {
-    // Open a Sudoku "Puzzle Bank" database file.
     FILE *database = fopen(filename, "r");
     
-    // Handle any file open errors.
     if (database == NULL)
         return -1;
 
-    // Seek to EOF.
     fseek(database, 0, SEEK_END);
 
-    // Choose a random index.
     srand((unsigned) time(NULL));
     int random_index = rand() % (ftell(database) / RECORD_SIZE);
 
-    // Seek to the random index + the offset of the puzzle.
     fseek(database, random_index * RECORD_SIZE + SHA1_SIZE + 1, SEEK_SET);
 
-    // Read 81 bytes into the puzzle array.
     fread(puzzle, 1, PUZZLE_SIZE, database);
 
     fclose(database);
